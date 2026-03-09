@@ -4,7 +4,9 @@ This repository is used personally to learn and test how to use Terraform.
 
 Current example:
 - Uses the `hashicorp/google` provider
+- Targets `us-central1` with zone `us-central1-c`
 - Creates a simple GCP VPC network named `terraform-network`
+- Creates a small GCP VM instance named `terraform-instance` using `e2-micro`
 - Reads the GCP project ID from a Terraform variable
 
 Quick start:
