@@ -24,6 +24,12 @@ Current hook:
 - `terraform fmt -check -recursive`
 - `terraform validate`
 
+CI:
+- GitHub Actions runs `terraform fmt -check -recursive`
+- GitHub Actions runs `terraform init -backend=false`
+- GitHub Actions runs `terraform validate`
+- The workflow runs on both `push` and `pull_request`
+
 Notes:
 - `terraform.tfvars` is ignored and should stay local
 - `.terraform.lock.hcl` is kept so provider versions stay reproducible
