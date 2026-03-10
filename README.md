@@ -8,6 +8,7 @@ Current example:
 - Creates a simple GCP VPC network named `terraform-network`
 - Creates a small GCP VM instance named `terraform-instance` using `e2-micro`
 - Reads the GCP project ID from a Terraform variable
+- Includes a small Go API with a `/health` endpoint
 
 Quick start:
 1. Copy `terraform.tfvars.example` to `terraform.tfvars`
@@ -27,6 +28,7 @@ Pre-commit:
 Current hook:
 - `terraform fmt -check -recursive`
 - `terraform validate`
+- `cd go-api && go test ./...`
 
 CI:
 - GitHub Actions runs `terraform fmt -check -recursive`
@@ -39,3 +41,9 @@ Notes:
 - `backend/dev.hcl` is ignored and should stay local
 - `backend/dev.hcl.example` shows the expected backend config format
 - `.terraform.lock.hcl` is kept so provider versions stay reproducible
+
+Go API:
+1. Change into `go-api`
+2. Run `go test ./...`
+3. Run `go run .`
+4. Open `http://localhost:8080/health`
