@@ -1,0 +1,2 @@
+bucket = "learn-terraform-bucket"
+prefix = "learn-terraform/dev"

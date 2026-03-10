@@ -1,4 +1,6 @@
 terraform {
+  backend "gcs" {}
+
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -7,15 +9,28 @@ terraform {
   }
 }
 
+
 variable "project_id" {
-  description = "The ID of the project in which to create the resources."
+  description = "GCP project ID"
   type        = string
+}
+
+variable "region" {
+  description = "GCP region"
+  type        = string
+  default     = "us-central1"
+}
+
+variable "zone" {
+  description = "GCP zone"
+  type        = string
+  default     = "us-central1-c"
 }
 
 provider "google" {
   project = var.project_id
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_compute_network" "vpc_network" {
@@ -40,4 +55,3 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 }
-

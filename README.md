@@ -12,9 +12,11 @@ Current example:
 Quick start:
 1. Copy `terraform.tfvars.example` to `terraform.tfvars`
 2. Set `project_id` to your GCP project ID
-3. Run `terraform init`
-4. Run `terraform plan`
-5. Run `terraform apply`
+3. Copy `backend/dev.hcl.example` to `backend/dev.hcl`
+4. Update `backend/dev.hcl` with your GCS bucket name and state prefix
+5. Run `terraform init -backend-config=backend/dev.hcl`
+6. Run `terraform plan`
+7. Run `terraform apply`
 
 Pre-commit:
 1. Run `pre-commit install`
@@ -34,4 +36,6 @@ CI:
 
 Notes:
 - `terraform.tfvars` is ignored and should stay local
+- `backend/dev.hcl` is ignored and should stay local
+- `backend/dev.hcl.example` shows the expected backend config format
 - `.terraform.lock.hcl` is kept so provider versions stay reproducible
