@@ -13,6 +13,18 @@ repos:
         language: system
         files: \.tf$
         pass_filenames: false
+      - id: go-api-fmt
+        name: go api fmt
+        entry: bash -c 'cd go-api && test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }'
+        language: system
+        files: ^go-api/.*\.go$
+        pass_filenames: false
+      - id: go-api-vet
+        name: go api vet
+        entry: bash -c 'cd go-api && go vet ./...'
+        language: system
+        always_run: true
+        pass_filenames: false
       - id: go-api-test
         name: go api test
         entry: bash -c 'cd go-api && go test ./...'

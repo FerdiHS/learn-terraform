@@ -28,6 +28,8 @@ Pre-commit:
 Current hook:
 - `terraform fmt -check -recursive`
 - `terraform validate`
+- `cd go-api && gofmt -l .`
+- `cd go-api && go vet ./...`
 - `cd go-api && go test ./...`
 
 CI:
@@ -35,6 +37,7 @@ CI:
 - GitHub Actions runs `terraform init -backend=false`
 - GitHub Actions runs `terraform validate`
 - The workflow runs on both `push` and `pull_request`
+- GitHub Actions also runs Go `fmt`, `vet`, and `test` for `go-api`
 
 Notes:
 - `terraform.tfvars` is ignored and should stay local
@@ -47,3 +50,8 @@ Go API:
 2. Run `go test ./...`
 3. Run `go run .`
 4. Open `http://localhost:8080/health`
+
+Go API Docker:
+1. Run `docker build -t learn-terraform-go-api ./go-api`
+2. Run `docker run --rm -p 8080:8080 learn-terraform-go-api`
+3. Open `http://localhost:8080/health`
