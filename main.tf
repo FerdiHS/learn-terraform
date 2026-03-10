@@ -27,31 +27,69 @@ variable "zone" {
   default     = "us-central1-c"
 }
 
+variable "artifact_registry_repository_id" {
+  description = "Artifact Registry repository name"
+  type        = string
+  default     = "learn-terraform"
+}
+
+variable "go_api_image" {
+  description = "Full Artifact Registry image URL for the Go API"
+  type        = string
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
   zone    = var.zone
 }
 
-resource "google_compute_network" "vpc_network" {
-  name                    = "terraform-network"
-  auto_create_subnetworks = true
+resource "google_project_service" "run_api" {
+  project            = var.project_id
+  service            = "run.googleapis.com"
+  disable_on_destroy = false
 }
 
-resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-instance"
-  machine_type = "e2-micro"
-  tags         = ["dev"]
+resource "google_project_service" "artifact_registry_api" {
+  project            = var.project_id
+  service            = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
+}
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
+resource "google_artifact_registry_repository" "docker_repo" {
+  location      = var.region
+  repository_id = var.artifact_registry_repository_id
+  description   = "Docker images for learn-terraform"
+  format        = "docker"
+
+  depends_on = [google_project_service.artifact_registry_api]
+}
+
+resource "google_cloud_run_v2_service" "go_api" {
+  name                = "go-api"
+  location            = var.region
+  deletion_protection = false
+
+  template {
+    containers {
+      image = var.go_api_image
+
+      ports {
+        container_port = 8080
+      }
     }
   }
 
-  network_interface {
-    network = google_compute_network.vpc_network.name
-    access_config {
-    }
-  }
+  depends_on = [google_project_service.run_api]
+}
+
+resource "google_cloud_run_service_iam_binding" "go_api_public" {
+  location = google_cloud_run_v2_service.go_api.location
+  service  = google_cloud_run_v2_service.go_api.name
+  role     = "roles/run.invoker"
+  members  = ["allUsers"]
+}
+
+output "go_api_url" {
+  value = google_cloud_run_v2_service.go_api.uri
 }

@@ -1,3 +1,4 @@
 project_id = "your-gcp-project-id"
 region     = "us-central1"
 zone       = "us-central1-c"
+go_api_image = "us-central1-docker.pkg.dev/your-gcp-project-id/learn-terraform/go-api:v0.1.0"
